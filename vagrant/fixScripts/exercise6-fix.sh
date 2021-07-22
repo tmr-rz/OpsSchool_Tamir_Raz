@@ -2,10 +2,11 @@
 #add fix to exercise6-fix here
 
 #set destination server
-if [[ $HOSTNAME == server1 ]]; then
-	destserver = server2
-else
-	destserver = server1
+if [  $HOSTNAME == "server1" ];
+        then
+                destserver="server2"
+        else
+                destserver="server1"
 fi
 
 #var declaration
@@ -16,12 +17,12 @@ totbytes=0
 
 for arg in "$@"
 do
-	if [[ $arg != $dstserverp ]];
-	then
-	scp -r $p vagrant@$dst:$dstserverp
-	size=$(stat -c%s $arg)
-	((totbytes += $size))
-	fi
+        if [[ $arg != $dstserverp ]];
+        then
+        scp -r $arg vagrant@$dstserver:$dstserverp
+        size=$(stat -c%s $arg)
+        ((totbytes += $size))
+        fi
 done
 
 echo "$totbytes"
