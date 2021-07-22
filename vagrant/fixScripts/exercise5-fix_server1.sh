@@ -1,2 +1,51 @@
 #!/bin/bash
 #add fix to exercise5-server1 here
+
+#disable host key verification:
+echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+#skip host key checking:
+echo "    UserKnownHostsFile=/dev/null" >> /etc/ssh/ssh_config
+
+#set private key in host
+echo '-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAwUxNBdAvHCoEU//P+SyD2GaXS8SHugTCQ1s95PZOfHc3gk4O
+9gkPZOIDGh28GRD/PQsCosx31fBHPoxaeXhLBTOJNbSnnZoauskckMQEfv2SbBc7
+3cwI3DtAa6FXAihIlH7wX6OSwfL2l0hSdZ2elVvJ5yMuIOUzr8IFYNQbScapWiQG
+pDCGRVcuzOSGHiKbOl68dgSzcDRxNe7xIAIeMm/1tL4C4g09Fb1dIEo98MEN9h09
+7CNNMpW5UEQHxVZq6OkZ5cIyRRl3TX3zvViO3v1HmTG7/sye1PNsokKSH1zZheuz
+eKJwWpWZt8dTS0tGHnSNozp08kML7WsUJ1qKrwIDAQABAoIBACxWzUAtHfFO7gk6
+n8EfZerotYHKxft0hf8fWdZAbYZ9bj00nJfxQhe5BE8kTPZPAM1Gzkb7se1gHWeK
+mGJOpp690JaCJwSuybzYzvWiEQn0Lnce6TuaRtoFuWQ28RdsmCF/8LFvewWELu5K
+x6d1DWBjWq/rUPR4vt9tGQC6BrxoMG0xnwl8FR41GrYqNUSkfRwTflqGUzDFl1Db
+ndkN3EtP+zNU+lTTmF0ZlZ9nCa+movse2VISJ6X8RX36uScnc6XBHANxofXVqcg3
+AVxbhPJWgkIk1KUs5g9G5Cr9A3o+wOczlBkgRXagGC5J/jqUQd2SCIXKULJ3A1Wp
+ftGT2SkCgYEA5TBvbTLxFaUfAtZKxqiSfos1RYabENj03XO9lCK22h8Q0EMWFscS
+ZUEb3BWP2f+qq1wcqsVGZZ/4O6AJqj4KHEgZl+ETsQmo+n7IbEV6tB2qY7tNye/B
+gglx7U36JBV84h/sucFGm4njQ+E2VIJKVFELO28hjyIL4Z6Rzzt1VXMCgYEA1+kH
+GhigNOZGFgIQBn2WfDVb3RwwGSnbQbRH90vwmLU2Z1d2RVd8YYiud8/y9bvqscqf
+nrun7neXWjH8odoMuTXfDztnCxwT+XI+gJUOhM+r8VNj8MxqeNW1CYX0OsJdhSrU
+DoftFJMGPdIIndhfbphmtsxKPXMJYI0yDSHvRtUCgYB4JXAEWtQveKRNJHGGuxAw
+7mE61Vms909GWEplwd0Bc4+o3cJSpoFqOzuToGoM6g5aTqtoiopg8/95omfuqx85
+vEJOcFuWT24aAySmPbYZfgO4zJP27I0Q0kq7EEm1aN5S3FGI/104ZIyTJRkKLFMy
+6FlvCs8Y7cw0tp/Rd2YHKQKBgQDVs/Vuk/9GPMIUGHiKJBYl3J6PbM4CqhY1o14z
+3HtIetxdTwlmOuCGnUWqmy3sodH7pgV1lGH0O3SYNq/J90vuqe6dYfts2J7AoJ5S
+oLZdKDwUwahC9+FOtp/YzDhfTHBKVYjM1ScI3TkpSVF0Amz6x2eq+OtmhQ07/qUS
+sIrn/QKBgDzOVEaltM+JGhuhjHmzeWa//7b6ldoZqpuM+WSEkzv2G8ecgzdyZlcQ
+sm+2imjPdeWMZXASRNqQhFjN8/570s0Rsj5fBDz0+oB7PGM/KTRVAYUY5uG02Q+D
+1dcB4ZfJ3ppbYQ+IyoLrwmuZ499FiE30bDEz4kjetkEHqQnydHzs
+-----END RSA PRIVATE KEY-----'>/home/vagrant/.ssh/id_rsa
+
+#set public key on server2 authorized_keys
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDpQ688XvC1KVoUB20z8LpAQUv/nQqq5FbrmSHuhld4P6Jcq76YT+TRHZiqwHh2BBG/O2MkEAFokJbaM5MFvZm+j5LAeP/cgCYBAMMJRqRaVXUuTezUU1bxUqwhTNPfQWWw7aQJTb9cqpzHjDQcWfMrKtILwDJX+i7wrWjJX9I1pnm1Ir8LPdTvvlkdBt++IVnas0XEDsPVtqnpgYJya5CLrn20FOV0Ux/7m32Yj3GkD/WyX1SHNkzfPuCmyUPtUOSh4R8W9ILDIs05o0E7eNICwtXCsPoF6/wiQsQld9tT85rWJLPVzzUogNfM5WBMiFTq5HBQ9lNJDti4NxGFBczj' >>/home/vagrant/.ssh/id_rsa.pub
+
+#permission handling
+chown -R vagrant. /home/vagrant
+chmod 0400 /home/vagrant/.ssh/id_rsa
+
+sudo apt install sshpass -y
+sshpass -p 'vagrant' ssh-copy-id -i ~/.ssh/id_rsa.pub vagrant@server2
+
+
+
+
+
